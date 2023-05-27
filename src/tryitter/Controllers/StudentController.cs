@@ -24,4 +24,11 @@ public class StudentController : ControllerBase
         _repository.AddStudent(student);
         return Ok();
     }
+
+    [HttpPost("/login")]
+    public IActionResult Login(StudentLogin studentlogin)
+    {
+        var token = _repository.Login(studentlogin);
+        return Ok(token);
+    }
 }

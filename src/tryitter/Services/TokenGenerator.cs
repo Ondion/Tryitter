@@ -27,8 +27,8 @@ namespace tryitter.Services
         private ClaimsIdentity AddClaims(Student student)
         {
             var claims = new ClaimsIdentity();
-            // claims.AddClaim(new Claim(ClaimTypes.Name, client.Name));
-            // claims.AddClaim(new Claim(ClaimTypes.Role, client.Currency.ToString()));
+            claims.AddClaim(new Claim(ClaimTypes.Name, student.Name));
+            claims.AddClaim(new Claim(ClaimTypes.Email, student.Email));
             // claims.AddClaim(new Claim(ClaimTypes.UserData, client.IsCompany ? "PessoaJuridica" : "PessoaFisica"));
 
             return claims;

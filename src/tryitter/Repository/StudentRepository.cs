@@ -32,9 +32,27 @@ namespace tryitter.Repository
                 return student;
             }
 
-
-
+        }
+        public Student GetStudent(string name)
+        {
+            Student student = _context.Students.FirstOrDefault(x => x.Name == name);
+            return student;
         }
 
+        public string Login(StudentLogin studentLogin)
+        {
+            if (studentLogin.Name == null || studentLogin.Password == null)
+            {
+                throw new Exception("all fields are not filled in");
+            }
+
+            var studentdb = GetStudent(studentLogin.Name);
+            if (studentdb.Name == studentLogin.Name && new Hash(SHA512.Create()).VerificarSenha(studentLogin.Password, studentdb.Password))
+            {
+                return new TokenGenerator().Generate(studentdb);
+            }
+            return "user not found";
+
+        }
     }
 }
