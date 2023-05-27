@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using tryitter.Models;
+using tryitter.Repository;
+
 
 namespace tryitter.Controllers;
 
@@ -6,5 +9,26 @@ namespace tryitter.Controllers;
 [Route("[controller]")]
 public class StudentController : ControllerBase
 {
+    private readonly StudentRepository _repository;
+    public StudentController(StudentRepository repository)
+    {
+        _repository = repository;
+    }
+    [HttpPost]
+    public IActionResult CreateUser(Student student)
+    {
+        if (student.Name == null || student.Email == null || student.Status == null || student.Password == null)
+        {
+            return BadRequest();
+        }
+        _repository.AddStudent(student);
+        return Ok();
+    }
 
+    [HttpPost("/login")]
+    public IActionResult Login(StudentLogin studentlogin)
+    {
+        var token = _repository.Login(studentlogin);
+        return Ok(token);
+    }
 }
