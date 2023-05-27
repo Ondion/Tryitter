@@ -14,11 +14,23 @@ public class TryitterContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-
             var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTION_STRING");
 
-            //alterar
-            // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=master;User=SA;Password=Password12!;");
+            optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=Password12;");
         }
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Student>()
+        .HasKey(x => x.StudentId);
+
+        modelBuilder.Entity<Post>()
+        .HasKey(x => x.PostId);
+
+        modelBuilder.Entity<Post>()
+        .HasOne(c => c.Student)
+        .WithMany(x => x.Posts)
+        .HasForeignKey(d => d.StudentId);
     }
 }
