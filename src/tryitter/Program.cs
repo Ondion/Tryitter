@@ -33,10 +33,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    // options.AddPolicy("Name", policy =>
-    // policy.RequireClaim(ClaimTypes.Name));
-    // options.AddPolicy("CustomerRole", policy => policy.RequireClaim(ClaimTypes.UserData, "PessoaFisica"));
-    // options.AddPolicy("CustomerCurrency", policy => policy.RequireClaim(ClaimTypes.Role, new List<string>() { "Real", "Peso" }));
+    options.AddPolicy("StudentName", policy =>
+    policy.RequireClaim(ClaimTypes.Name));
 });
 
 var app = builder.Build();
