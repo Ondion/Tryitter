@@ -14,23 +14,16 @@ namespace tryitter.Repository
         }
         public Student AddStudent(Student studentInput)
         {
-            if (studentInput.Name == null || studentInput.Email == null || studentInput.Status == null || studentInput.Password == null)
+            var student = new Student
             {
-                throw new Exception("all fields are not filled in");
-            }
-            else
-            {
-                var student = new Student
-                {
-                    Name = studentInput.Name,
-                    Email = studentInput.Email,
-                    Status = studentInput.Status,
-                    Password = new Hash(SHA512.Create()).CriptografarSenha(studentInput.Password)
-                };
-                _context.Students.Add(student);
-                _context.SaveChanges();
-                return student;
-            }
+                Name = studentInput.Name,
+                Email = studentInput.Email,
+                Status = studentInput.Status,
+                Password = new Hash(SHA512.Create()).CriptografarSenha(studentInput.Password)
+            };
+            _context.Students.Add(student);
+            _context.SaveChanges();
+            return student;
         }
         public Student GetStudent(string name)
         {
@@ -42,7 +35,6 @@ namespace tryitter.Repository
         {
             Student student = _context.Students.Find(id);
             return student;
-
         }
 
         public List<Student> GetAllStudents()
@@ -53,11 +45,6 @@ namespace tryitter.Repository
 
         public string Login(StudentLogin studentLogin)
         {
-            if (studentLogin.Name == null || studentLogin.Password == null)
-            {
-                throw new Exception("all fields are not filled in");
-            }
-
             var studentdb = GetStudent(studentLogin.Name);
             if (studentdb.Name == studentLogin.Name && new Hash(SHA512.Create()).VerificarSenha(studentLogin.Password, studentdb.Password))
             {
