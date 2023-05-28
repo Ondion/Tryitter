@@ -30,6 +30,10 @@ public class StudentController : ControllerBase
     [HttpPost("/Login")]
     public IActionResult Login(StudentLogin studentlogin)
     {
+        if (studentlogin.Name == null || studentlogin.Password == null)
+        {
+            BadRequest("all fields are not filled in");
+        }
         var token = _repository.Login(studentlogin);
         return Ok(token);
     }
