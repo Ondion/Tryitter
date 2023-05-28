@@ -42,6 +42,7 @@ namespace tryitter.Repository
         {
             Student student = _context.Students.Find(id);
             return student;
+
         }
 
         public List<Student> GetAllStudents()
