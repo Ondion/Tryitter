@@ -10,6 +10,5 @@ public class Student
     public string Email { get; set; } = default!;
     public string Password { get; set; } = default!;
     public string Status { get; set; } = default!;
-    [InverseProperty("Student")]
     public virtual ICollection<Post>? Posts { get; set; }
 }
