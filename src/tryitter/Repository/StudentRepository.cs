@@ -44,6 +44,12 @@ namespace tryitter.Repository
             return student;
         }
 
+        public List<Student> GetAllStudents()
+        {
+            var students = _context.Students.ToList();
+            return students;
+        }
+
         public string Login(StudentLogin studentLogin)
         {
             if (studentLogin.Name == null || studentLogin.Password == null)
