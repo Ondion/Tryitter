@@ -10,6 +10,8 @@ public class Post
     public string Content { get; set; } = default!;
     public string? Image { get; set; }
     [ForeignKey("StudentId")]
+    public DateTime CreatAt { get; set; }
+    public DateTime UpdatetAt { get; set; }
     public int StudentId { get; set; }
     public virtual Student? Student { get; set; }
 
