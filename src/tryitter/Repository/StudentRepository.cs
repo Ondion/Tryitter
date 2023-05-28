@@ -85,7 +85,7 @@ namespace tryitter.Repository
         {
             _context.Students.Remove(student);
             _context.SaveChanges();
-            return "student removed";
+            return "student remove";
         }
     }
 }
