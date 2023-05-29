@@ -20,10 +20,6 @@ public class PostController : ControllerBase
   [Authorize]
   public IActionResult CreateStudent(PostRequest postRequest)
   {
-    if (postRequest.Content == null && postRequest.StudentEmail == null)
-    {
-      return BadRequest();
-    }
     _repository.CreatePost(postRequest);
     return Ok();
   }

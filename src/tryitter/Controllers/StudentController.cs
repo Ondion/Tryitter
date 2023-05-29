@@ -19,10 +19,6 @@ public class StudentController : ControllerBase
   [HttpPost]
   public IActionResult CreateStudent(Student student)
   {
-    if (student.Name == null && student.Email == null && student.Status == null && student.Password == null)
-    {
-      return BadRequest();
-    }
     var response = _repository.AddStudent(student);
     if (response == "Email alredy exists") return BadRequest(response);
     return Ok(response);
@@ -31,10 +27,6 @@ public class StudentController : ControllerBase
   [HttpPost("/Login")]
   public IActionResult Login(StudentLogin studentlogin)
   {
-    if (studentlogin.Name == null && studentlogin.Password == null)
-    {
-      BadRequest("all fields are not filled in");
-    }
     var token = _repository.Login(studentlogin);
     return Ok(token);
   }
@@ -43,10 +35,6 @@ public class StudentController : ControllerBase
   [Authorize]
   public IActionResult UpdateStudent(int id, Student student)
   {
-    if (student.Name == null && student.Email == null && student.Status == null && student.Password == null)
-    {
-      return BadRequest();
-    }
     var response = _repository.UpdateStudent(id, student);
     if (response == "Email alredy exists") return BadRequest(response);
     return Ok(response);
