@@ -15,7 +15,7 @@ namespace tryitter.Repository
     public string AddStudent(Student studentInput)
     {
       Student studentDB = _context.Students.AsNoTracking().Where(c => c.Email == studentInput.Email).FirstOrDefault();
-      if (studentDB != null) return "Email alredy exists";
+      if (studentDB != null) return "Email already exists";
 
       var newStudent = new Student
       {
@@ -63,7 +63,7 @@ namespace tryitter.Repository
 
       if (currentStateofStudent.Email != studentInput.Email && hasStudantWithThisEmail != null)
       {
-        return "Email alredy exists";
+        return "Email already exists";
       }
 
       var student = new Student
@@ -83,7 +83,7 @@ namespace tryitter.Repository
     {
       _context.Students.Remove(student);
       _context.SaveChanges();
-      return "student remove";
+      return "student removed";
     }
   }
 }

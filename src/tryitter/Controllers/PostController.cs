@@ -18,7 +18,7 @@ public class PostController : ControllerBase
 
   [HttpPost]
   [Authorize]
-  public IActionResult CreateStudent(PostRequest postRequest)
+  public IActionResult CreatePost(PostRequest postRequest)
   {
     _repository.CreatePost(postRequest);
     return Ok();
@@ -38,6 +38,12 @@ public class PostController : ControllerBase
     var response = _repository.UpdatePost(id, postRequest);
     if (response == "Not Alowed") return Unauthorized(response);
     return Ok(response);
+  }
+  [HttpGet("Student/{id}")]
+  public IActionResult GetPostByStudentId(int id)
+  {
+    var posts = _repository.GetPostByStudentId(id);
+    return Ok(posts);
   }
 
 }

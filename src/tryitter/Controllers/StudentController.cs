@@ -20,7 +20,7 @@ public class StudentController : ControllerBase
   public IActionResult CreateStudent(Student student)
   {
     var response = _repository.AddStudent(student);
-    if (response == "Email alredy exists") return BadRequest(response);
+    if (response == "Email already exists") return BadRequest(response);
     return Ok(response);
   }
 
@@ -36,7 +36,7 @@ public class StudentController : ControllerBase
   public IActionResult UpdateStudent(int id, Student student)
   {
     var response = _repository.UpdateStudent(id, student);
-    if (response == "Email alredy exists") return BadRequest(response);
+    if (response == "Email already exists") return BadRequest(response);
     return Ok(response);
   }
 

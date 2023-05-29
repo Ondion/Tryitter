@@ -14,7 +14,6 @@ namespace tryitter.Repository
     }
     public Post CreatePost(PostRequest postRequest)
     {
-      // string authHeader = _context.Posts.Request.Headers["Authorization"];
       var student = _context.Students.FirstOrDefault(x => x.Email == postRequest.StudentEmail);
       var postCreated = new Post
       {
@@ -29,17 +28,36 @@ namespace tryitter.Repository
       return postCreated;
     }
 
-    public List<Post> GetAllPosts()
-    {
-      var posts = _context.Posts.ToList();
-      _context.SaveChanges();
-      return posts;
-    }
+    // public List<Post> GetAllPosts()
+    // {
+    //   List<PostResponse> listPosts = new List<PostResponse>();
+    //   var posts = _context.Posts?.ToList();
+    //   foreach (Post post in posts)
+    //   {
+    //     PostResponse postResponse = new PostResponse
+    //     {
+    //       PostId = post.PostId,
+    //       Content = post.Content,
+    //       Image = post.Image,
+    //       CreatAt = post.CreatAt,
+    //       UpdatetAt = post.UpdatetAt,
+    //       StudentId = post.StudentId
+    //     };
+    //     listPosts.Add(postResponse);
+    //   }
+    //   return posts;
+    // }
 
     public Post GetPostById(int id)
     {
       var post = _context.Posts.Find(id);
       return post;
+    }
+
+    public List<Post> GetPostByStudentId(int id)
+    {
+      var posts = _context.Posts.Where(p => p.StudentId == id).ToList();
+      return posts;
     }
 
     public string UpdatePost(int id, PostRequest postRequest)
