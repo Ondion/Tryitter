@@ -5,74 +5,85 @@ using tryitter.Services;
 
 namespace tryitter.Repository
 {
-    public class StudentRepository
+  public class StudentRepository
+  {
+    private readonly TryitterContext _context;
+    public StudentRepository(TryitterContext context)
     {
-        private readonly TryitterContext _context;
-        public StudentRepository(TryitterContext context)
-        {
-            _context = context;
-        }
-        public Student AddStudent(Student studentInput)
-        {
-            var student = new Student
-            {
-                Name = studentInput.Name,
-                Email = studentInput.Email,
-                Status = studentInput.Status,
-                Password = new Hash(SHA512.Create()).CriptografarSenha(studentInput.Password)
-            };
-            _context.Students.Add(student);
-            _context.SaveChanges();
-            return student;
-        }
-        public Student GetStudent(string name)
-        {
-            Student student = _context.Students.FirstOrDefault(x => x.Name == name);
-            return student;
-        }
-
-        public Student GetStudentById(int id)
-        {
-            Student student = _context.Students.Find(id);
-            return student;
-        }
-
-        public List<Student> GetAllStudents()
-        {
-            var students = _context.Students.ToList();
-            return students;
-        }
-
-        public string Login(StudentLogin studentLogin)
-        {
-            var studentdb = GetStudent(studentLogin.Name);
-            if (studentdb.Name == studentLogin.Name && new Hash(SHA512.Create()).VerificarSenha(studentLogin.Password, studentdb.Password))
-            {
-                return new TokenGenerator().Generate(studentdb);
-            }
-            return "user not found";
-        }
-
-        public string UpdateStudent(int id, Student studentInput)
-        {
-            var student = new Student
-            {
-                StudentId = id,
-                Name = studentInput.Name,
-                Email = studentInput.Email,
-                Status = studentInput.Status,
-                Password = new Hash(SHA512.Create()).CriptografarSenha(studentInput.Password)
-            };
-            _context.Students.Update(student);
-            _context.SaveChanges();
-            return "Student updated";
-        }
-
-        public string DeleteStudent(Student student)
-        {
-            _context.Students.Remove(student);
-            _context.SaveChanges();
-            return "student remove";
-        }
+      _context = context;
     }
+    public string AddStudent(Student studentInput)
+    {
+      Student studentDB = _context.Students.AsNoTracking().Where(c => c.Email == studentInput.Email).FirstOrDefault();
+      if (studentDB != null) return "Email alredy exists";
+
+      var newStudent = new Student
+      {
+        Name = studentInput.Name,
+        Email = studentInput.Email,
+        Status = studentInput.Status,
+        Password = new Hash(SHA512.Create()).CriptografarSenha(studentInput.Password)
+      };
+      _context.Students.Add(newStudent);
+      _context.SaveChanges();
+      return "student created";
+    }
+    public Student GetStudent(string name)
+    {
+      Student student = _context.Students.FirstOrDefault(x => x.Name == name);
+      return student;
+    }
+
+    public Student GetStudentById(int id)
+    {
+      Student student = _context.Students.Find(id);
+      return student;
+    }
+
+    public List<Student> GetAllStudents()
+    {
+      var students = _context.Students.ToList();
+      return students;
+    }
+
+    public string Login(StudentLogin studentLogin)
+    {
+      var studentdb = GetStudent(studentLogin.Name);
+      if (studentdb.Name == studentLogin.Name && new Hash(SHA512.Create()).VerificarSenha(studentLogin.Password, studentdb.Password))
+      {
+        return new TokenGenerator().Generate(studentdb);
+      }
+      return "user not found";
+    }
+
+    public string UpdateStudent(int id, Student studentInput)
+    {
+      var currentStateofStudent = _context.Students.AsNoTracking().Where(c => c.StudentId == id).FirstOrDefault();
+      var hasStudantWithThisEmail = _context.Students.AsNoTracking().Where(c => c.Email == studentInput.Email).FirstOrDefault();
+
+      if (currentStateofStudent.Email != studentInput.Email && hasStudantWithThisEmail != null)
+      {
+        return "Email alredy exists";
+      }
+
+      var student = new Student
+      {
+        StudentId = id,
+        Name = studentInput.Name,
+        Email = studentInput.Email,
+        Status = studentInput.Status,
+        Password = new Hash(SHA512.Create()).CriptografarSenha(studentInput.Password)
+      };
+      _context.Students.Update(student);
+      _context.SaveChanges();
+      return "Student updated";
+    }
+
+    public string DeleteStudent(Student student)
+    {
+      _context.Students.Remove(student);
+      _context.SaveChanges();
+      return "student remove";
+    }
+  }
 }

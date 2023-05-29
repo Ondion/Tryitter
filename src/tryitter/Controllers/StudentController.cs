@@ -10,111 +10,114 @@ namespace tryitter.Controllers;
 [Route("[controller]")]
 public class StudentController : ControllerBase
 {
-    private readonly StudentRepository _repository;
-    public StudentController(StudentRepository repository)
-    {
-        _repository = repository;
-    }
+  private readonly StudentRepository _repository;
+  public StudentController(StudentRepository repository)
+  {
+    _repository = repository;
+  }
 
-    [HttpPost]
-    public IActionResult CreateStudent(Student student)
+  [HttpPost]
+  public IActionResult CreateStudent(Student student)
+  {
+    if (student.Name == null && student.Email == null && student.Status == null && student.Password == null)
     {
-        if (student.Name == null || student.Email == null || student.Status == null || student.Password == null)
-        {
-            return BadRequest();
-        }
-        _repository.AddStudent(student);
-        return Ok();
+      return BadRequest();
     }
+    var response = _repository.AddStudent(student);
+    if (response == "Email alredy exists") return BadRequest(response);
+    return Ok(response);
+  }
 
-    [HttpPost("/Login")]
-    public IActionResult Login(StudentLogin studentlogin)
+  [HttpPost("/Login")]
+  public IActionResult Login(StudentLogin studentlogin)
+  {
+    if (studentlogin.Name == null && studentlogin.Password == null)
     {
-        if (studentlogin.Name == null || studentlogin.Password == null)
-        {
-            BadRequest("all fields are not filled in");
-        }
-        var token = _repository.Login(studentlogin);
-        return Ok(token);
+      BadRequest("all fields are not filled in");
     }
+    var token = _repository.Login(studentlogin);
+    return Ok(token);
+  }
 
-    [HttpPut("{id}")]
-    [Authorize]
-    public IActionResult UpdateStudent(int id, Student student)
+  [HttpPut("{id}")]
+  [Authorize]
+  public IActionResult UpdateStudent(int id, Student student)
+  {
+    if (student.Name == null && student.Email == null && student.Status == null && student.Password == null)
     {
-        if (student.Name == null || student.Email == null || student.Status == null || student.Password == null)
-        {
-            return BadRequest();
-        }
-        var response = _repository.UpdateStudent(id, student);
-        return Ok(response);
+      return BadRequest();
     }
+    var response = _repository.UpdateStudent(id, student);
+    if (response == "Email alredy exists") return BadRequest(response);
+    return Ok(response);
+  }
 
-    [HttpDelete("{id}")]
-    [Authorize(Policy = "StudentName")]
-    public IActionResult DeleteStudent(int id)
+  [HttpDelete("{id}")]
+  [Authorize(Policy = "StudentName")]
+  //!retornar e ver cascade e policy
+  public IActionResult DeleteStudent(int id)
+  {
+    if (_repository.GetStudentById(id) == null)
     {
-        if (_repository.GetStudentById(id) == null)
-        {
-            return BadRequest("student not found");
-        }
-        var student = _repository.GetStudentById(id);
-        var response = _repository.DeleteStudent(student);
-        return Ok(response);
+      return BadRequest("student not found");
     }
+    var student = _repository.GetStudentById(id);
+    var response = _repository.DeleteStudent(student);
+    return Ok(response);
+  }
 
-    [HttpGet("Id/{id}")]
-    public IActionResult GetStudent(int id)
+  [HttpGet("Id/{id}")]
+  public IActionResult GetStudent(int id)
+  {
+    var student = _repository.GetStudentById(id);
+    if (student != null)
     {
-        var student = _repository.GetStudentById(id);
-        if (student != null)
-        {
-            var studentResult = new StudentResponse
-            {
-                StudentId = student.StudentId,
-                Name = student.Name,
-                Email = student.Email,
-                Status = student.Status,
-            };
-            return Ok(studentResult);
-        }
-        return BadRequest("student not found");
+      var studentResult = new StudentResponse
+      {
+        StudentId = student.StudentId,
+        Name = student.Name,
+        Email = student.Email,
+        Status = student.Status,
+      };
+      return Ok(studentResult);
     }
+    return BadRequest("student not found");
+  }
 
-    [HttpGet("Name/{name}")]
-    public IActionResult GetStudent(string name)
+  [HttpGet("Name/{name}")]
+  public IActionResult GetStudent(string name)
+  {
+    var student = _repository.GetStudent(name);
+    if (student != null)
     {
-        var student = _repository.GetStudent(name);
-        if (student != null)
-        {
-            var studentResult = new StudentResponse
-            {
-                StudentId = student.StudentId,
-                Name = student.Name,
-                Email = student.Email,
-                Status = student.Status,
-            };
-            return Ok(studentResult);
-        }
-        return BadRequest("student not found");
+      var studentResult = new StudentResponse
+      {
+        StudentId = student.StudentId,
+        Name = student.Name,
+        Email = student.Email,
+        Status = student.Status,
+      };
+      return Ok(studentResult);
     }
+    return BadRequest("student not found");
+  }
 
-    [HttpGet]
-    public IActionResult GetAllStudents()
+  [HttpGet]
+  public IActionResult GetAllStudents()
+  {
+    var listStudents = new List<StudentResponse>();
+    var students = _repository.GetAllStudents();
+    foreach (Student student in students)
     {
-        var listStudents = new List<StudentResponse>();
-        var students = _repository.GetAllStudents();
-        foreach (Student student in students)
-        {
-            listStudents.Add(new StudentResponse
-            {
-                StudentId = student.StudentId,
-                Name = student.Name,
-                Email = student.Email,
-                Status = student.Status
-            });
-        }
-        return Ok(listStudents);
+      listStudents.Add(new StudentResponse
+      {
+        StudentId = student.StudentId,
+        Name = student.Name,
+        Email = student.Email,
+        Status = student.Status
+      });
     }
+    return Ok(listStudents);
+  }
 
 }
