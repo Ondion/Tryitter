@@ -9,29 +9,28 @@ using tryitter.Constants;
 
 namespace tryitter.Services
 {
-    public class TokenGenerator
+  public class TokenGenerator
+  {
+    public string Generate(Student student)
     {
-        public string Generate(Student student)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
+      var tokenHandler = new JwtSecurityTokenHandler();
 
-            var tokenDescriptor = new SecurityTokenDescriptor()
-            {
-                Subject = AddClaims(student),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(TokenConstants.Secret)), SecurityAlgorithms.HmacSha256Signature),
-                Expires = DateTime.Now.AddDays(3)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-        private ClaimsIdentity AddClaims(Student student)
-        {
-            var claims = new ClaimsIdentity();
-            claims.AddClaim(new Claim(ClaimTypes.Name, student.Name));
-            claims.AddClaim(new Claim(ClaimTypes.Email, student.Email));
-            // claims.AddClaim(new Claim(ClaimTypes.UserData, client.IsCompany ? "PessoaJuridica" : "PessoaFisica"));
-
-            return claims;
-        }
+      var tokenDescriptor = new SecurityTokenDescriptor()
+      {
+        Subject = AddClaims(student),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(TokenConstants.Secret)), SecurityAlgorithms.HmacSha256Signature),
+        Expires = DateTime.Now.AddDays(3)
+      };
+      var token = tokenHandler.CreateToken(tokenDescriptor);
+      return tokenHandler.WriteToken(token);
     }
+    private ClaimsIdentity AddClaims(Student student)
+    {
+      var claims = new ClaimsIdentity();
+      claims.AddClaim(new Claim(ClaimTypes.Sid, student.StudentId.ToString()));
+      claims.AddClaim(new Claim(ClaimTypes.Name, student.Name));
+      claims.AddClaim(new Claim(ClaimTypes.Email, student.Email));
+      return claims;
+    }
+  }
 }
