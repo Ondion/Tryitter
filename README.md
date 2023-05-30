@@ -3,6 +3,12 @@
 O Tryitter é uma rede social, totalmente baseada em texto. <br>
 O objetivo deste projeto é proporcionar um ambiente em que pessoas estudantes podem, por meio de textos e imagens, compartilhar suas experiências e também acessar posts que possam contribuir para seu aprendizado.!
 
+## :mag: Tecnologias utilizadas
+- Construção da API - [ASP.NET ](https://dotnet.microsoft.com/pt-br/apps/aspnet)<br>
+- Banco de dados [SQL Server ](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads) <br>
+ - Autenticação - [JWT](https://jwt.io/) <br> 
+ - Testes - [Fluent Assertions](https://fluentassertions.com/) e [xUnit.net](https://xunit.net/) <br> 
+ - Deploy - [Azure](https://azure.microsoft.com/pt-br/) <br>
 ## 📋 Execute o projeto em sua máquina
 
 Clone o repositório:
@@ -22,6 +28,7 @@ dotnet run
 ```
   GET /Students
 ```
+
 ```
   GET /Student/Name/:name
 ```
@@ -46,6 +53,7 @@ dotnet run
 | :---------- | :--------- | :---------------------------------- |
 | `email` | `string` | **Obrigatório**. :mailbox: Seu email. |
 | `password` | `string` | **Obrigatório**.:closed_lock_with_key: Sua senha. |
+| ` Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
 
 :exclamation::exclamation: Retorna Token 
 
