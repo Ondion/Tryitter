@@ -12,4 +12,14 @@ public class PostResponse
   [ForeignKey("StudentId")]
   public int? StudentId { get; set; }
 
+  public PostResponse(int postId, string content, DateTime creatAt, DateTime updatetAt, string image, int studentId)
+  {
+    PostId = postId;
+    Content = content;
+    CreatAt = creatAt;
+    UpdatetAt = updatetAt;
+    Image = image;
+    StudentId = studentId;
+  }
+
 }

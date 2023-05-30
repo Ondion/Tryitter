@@ -17,7 +17,8 @@ public class TryitterContext : DbContext
       var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTION_STRING");
 
       // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=Password12;");
-      //   optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
+      optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
+      //   optionsBuilder.UseSqlServer(@"Server=tryitter.database.windows.net;Database=tryitter-DB;User=tryitter;Password=SenhadoDB123;");
     }
   }
 

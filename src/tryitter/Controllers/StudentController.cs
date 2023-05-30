@@ -76,7 +76,7 @@ public class StudentController : ControllerBase
   public IActionResult GetStudent(string name)
   {
     var student = _repository.GetStudent(name);
-    if (student != null)
+    if (student == null)
     {
       var studentResult = new StudentResponse
       {
@@ -93,19 +93,8 @@ public class StudentController : ControllerBase
   [HttpGet]
   public IActionResult GetAllStudents()
   {
-    var listStudents = new List<StudentResponse>();
     var students = _repository.GetAllStudents();
-    foreach (Student student in students)
-    {
-      listStudents.Add(new StudentResponse
-      {
-        StudentId = student.StudentId,
-        Name = student.Name,
-        Email = student.Email,
-        Status = student.Status
-      });
-    }
-    return Ok(listStudents);
+    return Ok(students);
   }
 
 }

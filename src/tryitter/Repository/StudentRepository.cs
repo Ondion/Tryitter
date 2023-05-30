@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using tryitter.Entities;
 using tryitter.Models;
 using tryitter.Services;
 
@@ -27,23 +28,6 @@ namespace tryitter.Repository
       _context.Students.Add(newStudent);
       _context.SaveChanges();
       return "student created";
-    }
-    public Student GetStudent(string name)
-    {
-      Student student = _context.Students.FirstOrDefault(x => x.Name == name);
-      return student;
-    }
-
-    public Student GetStudentById(int id)
-    {
-      Student student = _context.Students.Find(id);
-      return student;
-    }
-
-    public List<Student> GetAllStudents()
-    {
-      var students = _context.Students.ToList();
-      return students;
     }
 
     public string Login(StudentLogin studentLogin)
@@ -83,7 +67,36 @@ namespace tryitter.Repository
     {
       _context.Students.Remove(student);
       _context.SaveChanges();
-      return "student removed";
+      return "student remove";
+    }
+    public Student GetStudent(string name)
+    {
+      Student student = _context.Students.FirstOrDefault(x => x.Name == name);
+      return student;
+    }
+
+    public Student GetStudentById(int id)
+    {
+      Student student = _context.Students.Find(id);
+      return student;
+    }
+
+    public List<StudentResponse> GetAllStudents()
+    {
+      var listStudents = new List<StudentResponse>();
+      var students = _context.Students.ToList();
+
+      foreach (Student student in students)
+      {
+        listStudents.Add(new StudentResponse
+        {
+          StudentId = student.StudentId,
+          Name = student.Name,
+          Email = student.Email,
+          Status = student.Status
+        });
+      }
+      return listStudents;
     }
   }
 }

@@ -12,7 +12,7 @@ namespace tryitter.Repository
     {
       _context = context;
     }
-    public Post CreatePost(PostRequest postRequest)
+    public string CreatePost(PostRequest postRequest)
     {
       var student = _context.Students.FirstOrDefault(x => x.Email == postRequest.StudentEmail);
       var postCreated = new Post
@@ -25,41 +25,8 @@ namespace tryitter.Repository
       };
       _context.Posts.Add(postCreated);
       _context.SaveChanges();
-      return postCreated;
+      return "Post Created";
     }
-
-    // public List<Post> GetAllPosts()
-    // {
-    //   List<PostResponse> listPosts = new List<PostResponse>();
-    //   var posts = _context.Posts?.ToList();
-    //   foreach (Post post in posts)
-    //   {
-    //     PostResponse postResponse = new PostResponse
-    //     {
-    //       PostId = post.PostId,
-    //       Content = post.Content,
-    //       Image = post.Image,
-    //       CreatAt = post.CreatAt,
-    //       UpdatetAt = post.UpdatetAt,
-    //       StudentId = post.StudentId
-    //     };
-    //     listPosts.Add(postResponse);
-    //   }
-    //   return posts;
-    // }
-
-    public Post GetPostById(int id)
-    {
-      var post = _context.Posts.Find(id);
-      return post;
-    }
-
-    public List<Post> GetPostByStudentId(int id)
-    {
-      var posts = _context.Posts.Where(p => p.StudentId == id).ToList();
-      return posts;
-    }
-
     public string UpdatePost(int id, PostRequest postRequest)
     {
       var oldPost = _context.Posts.AsNoTracking().Where(c => c.PostId == id).FirstOrDefault();
@@ -78,6 +45,106 @@ namespace tryitter.Repository
       _context.SaveChanges();
       return "Post updated";
     }
+    public string DeletePost(int id, string studentEmail)
+    {
+      var post = _context.Posts.AsNoTracking().Where(c => c.PostId == id).FirstOrDefault();
+      if (post == null) return "Post not found";
+      var student = _context.Students.AsNoTracking().Where(c => c.Email == studentEmail).FirstOrDefault();
+      if (student.StudentId != post.StudentId) return "Not Alowed";
+      _context.Posts.Remove(post);
+      _context.SaveChanges();
+      return "Post deleted";
+    }
+
+    public List<PostResponse> GetAllPosts()
+    {
+      List<PostResponse> listPosts = new List<PostResponse>();
+      var posts = _context.Posts.ToList();
+      foreach (Post post in posts)
+      {
+        var postResponse = new PostResponse(
+            post.PostId,
+            post.Content,
+            post.CreatAt,
+            post.UpdatetAt,
+            post.Image,
+            post.StudentId);
+
+        listPosts.Add(postResponse);
+      }
+      return listPosts;
+    }
+
+    public PostResponse GetPostById(int id)
+    {
+      var post = _context.Posts.Find(id);
+
+      var postResponse = new PostResponse(
+          post.PostId,
+          post.Content,
+          post.CreatAt,
+          post.UpdatetAt,
+          post.Image,
+          post.StudentId);
+      return postResponse;
+    }
+
+    public List<PostResponse> GetPostByStudentId(int id)
+    {
+      List<PostResponse> listPosts = new List<PostResponse>();
+      var posts = _context.Posts.Where(p => p.StudentId == id).ToList();
+      foreach (Post post in posts)
+      {
+        var postResponse = new PostResponse(
+            post.PostId,
+            post.Content,
+            post.CreatAt,
+            post.UpdatetAt,
+            post.Image,
+            post.StudentId);
+
+        listPosts.Add(postResponse);
+      }
+      return listPosts;
+    }
+
+    public PostResponse GetLastPostByStudentId(int id)
+    {
+      var posts = _context.Posts.Where(p => p.StudentId == id).ToList();
+      var post = posts.LastOrDefault();
+      var postResponse = new PostResponse(
+          post.PostId,
+          post.Content,
+          post.CreatAt,
+          post.UpdatetAt,
+          post.Image,
+          post.StudentId);
+      return postResponse;
+    }
+    //!Continuar student name falta o delete post
+    // public List<Post> GetPostByStudentName(string name)
+    // {
+    //     var student = _context.Students.FirstOrDefault(s => s.Name == name);
+    //     var posts = _context.Posts.Where(p => p.StudentId == student.StudentId).ToList();
+    //     return posts;
+    // }
+
+    // public PostResponse GetLastPostByStudentName(string name)
+    // {
+    //     var student = _context.Students.FirstOrDefault(s => s.Name == name);
+    //     var posts = _context.Posts.Where(p => p.StudentId == student.StudentId).ToList();
+    //     var post = posts.LastOrDefault();
+    //     var postResponse = new PostResponse
+    //     {
+    //         PostId = post.PostId,
+    //         Content = post.Content,
+    //         CreatAt = post.CreatAt,
+    //         UpdatetAt = post.UpdatetAt,
+    //         Image = post.Image,
+    //         StudentId = post.StudentId
+    //     };
+    //     return postResponse;
+    // }
 
   }
 }
