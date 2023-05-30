@@ -72,18 +72,19 @@ namespace tryitter.Repository
             _context.SaveChanges();
             return "student remove";
         }
+        //get the student using the studant name
         public Student GetStudent(string name)
         {
             Student student = _context.Students.FirstOrDefault(x => x.Name == name);
             return student;
         }
-
+        //get the student using the studant id
         public Student GetStudentById(int id)
         {
             Student student = _context.Students.Find(id);
             return student;
         }
-
+        //get all students register
         public List<StudentResponse> GetAllStudents()
         {
             var listStudents = new List<StudentResponse>();
