@@ -6,33 +6,33 @@ namespace tryitter.Repository;
 public class TryitterContext : DbContext
 {
 
-  public DbSet<Post>? Posts { get; set; }
-  public DbSet<Student>? Students { get; set; }
+    public DbSet<Post>? Posts { get; set; }
+    public DbSet<Student>? Students { get; set; }
 
 
-  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-  {
-    if (!optionsBuilder.IsConfigured)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTION_STRING");
+        if (!optionsBuilder.IsConfigured)
+        {
+            var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTION_STRING");
 
-      // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=Password12;");
-      optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
-      //   optionsBuilder.UseSqlServer(@"Server=tryitter.database.windows.net;Database=tryitter-DB;User=tryitter;Password=SenhadoDB123;");
+            optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=Password12;");
+            // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
+            //   optionsBuilder.UseSqlServer(@"Server=tryitter.database.windows.net;Database=tryitter-DB;User=tryitter;Password=SenhadoDB123;");
+        }
     }
-  }
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
-    modelBuilder.Entity<Student>()
-    .HasKey(x => x.StudentId);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Student>()
+        .HasKey(x => x.StudentId);
 
-    modelBuilder.Entity<Post>()
-    .HasKey(x => x.PostId);
+        modelBuilder.Entity<Post>()
+        .HasKey(x => x.PostId);
 
-    modelBuilder.Entity<Post>()
-    .HasOne(c => c.Student)
-    .WithMany(x => x.Posts)
-    .HasForeignKey(d => d.StudentId);
-  }
+        modelBuilder.Entity<Post>()
+        .HasOne(c => c.Student)
+        .WithMany(x => x.Posts)
+        .HasForeignKey(d => d.StudentId);
+    }
 }
