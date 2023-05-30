@@ -12,7 +12,7 @@ namespace tryitter.Repository
     {
       _context = context;
     }
-    public Post CreatePost(PostRequest postRequest)
+    public string CreatePost(PostRequest postRequest)
     {
       var student = _context.Students.FirstOrDefault(x => x.Email == postRequest.StudentEmail);
       var postCreated = new Post
@@ -25,7 +25,7 @@ namespace tryitter.Repository
       };
       _context.Posts.Add(postCreated);
       _context.SaveChanges();
-      return postCreated;
+      return "Post Created";
     }
     public string UpdatePost(int id, PostRequest postRequest)
     {

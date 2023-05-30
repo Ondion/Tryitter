@@ -21,8 +21,8 @@ public class PostController : ControllerBase
   [Authorize]
   public IActionResult CreatePost(PostRequest postRequest)
   {
-    _repository.CreatePost(postRequest);
-    return Ok();
+    var postCreated = _repository.CreatePost(postRequest);
+    return Ok(postCreated);
   }
 
   [HttpPut("{id}")]
@@ -42,7 +42,7 @@ public class PostController : ControllerBase
     var stringStudentEmail = jsonBody.Split('"');
     var response = _repository.DeletePost(id, stringStudentEmail[3]);
     if (response == "Post not found") return BadRequest(response);
-    if (response == "Not Alowed") return BadRequest(response);
+    if (response == "Not Alowed") return Unauthorized(response);
     return Ok(response);
   }
 
