@@ -65,6 +65,7 @@ dotnet run
 ```
 | `Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
 
+##
 ### :page_facing_up: Posts :page_facing_up:
 
 
