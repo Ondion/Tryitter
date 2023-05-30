@@ -12,7 +12,7 @@ public class Post
   public DateTime UpdatetAt { get; set; }
   public string? Image { get; set; }
   [ForeignKey("StudentId")]
-  public int? StudentId { get; set; }
+  public int StudentId { get; set; }
   public Student? Student { get; set; }
 
 }
