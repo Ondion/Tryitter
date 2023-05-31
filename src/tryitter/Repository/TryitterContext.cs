@@ -12,14 +12,14 @@ public class TryitterContext : DbContext
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    if (!optionsBuilder.IsConfigured)
-    {
-      var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTION_STRING");
+        if (!optionsBuilder.IsConfigured)
+        {
+            var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTION_STRING");
 
-      // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=Password12;");
-      optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
-      //   optionsBuilder.UseSqlServer(@"Server=tryitter.database.windows.net;Database=tryitter-DB;User=tryitter;Password=SenhadoDB123;");
-    }
+            // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=Password12;");
+            // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
+              optionsBuilder.UseSqlServer(@"Server=tryitter.database.windows.net;Database=tryitter-DB;User=tryitter;Password=SenhadoDB123;");
+        }
   }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
