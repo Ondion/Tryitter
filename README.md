@@ -24,7 +24,7 @@ dotnet run
 
 ## 🧪 Executando os testes
 
-Entre na pasta dos testes ```cd src/triytter.test```
+Entre na pasta dos testes ```cd src/triytter.Test```
 
 ```
 dotnet test
