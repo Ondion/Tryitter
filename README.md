@@ -26,11 +26,11 @@ dotnet run
 
 ### :runner: Students :runner:
 ```
-  GET /Students
+  GET /Students 
 ```
 
 ```
-  GET /Student/Name/:name
+  GET /Student/Name/:name 
 ```
 ```
   GET /Student/Id/:id
@@ -40,10 +40,10 @@ dotnet run
 ```
 | Parâmetro   | Tipo       | Descrição                           |
 | :---------- | :--------- | :---------------------------------- |
-| `name` | `string` | **Obrigatório**. :information_desk_person: Nome do estudante. |
-| `email` | `string` | **Obrigatório**. :mailbox: Email do estudante. |
-| `Password` | `number` | **Obrigatório**. :closed_lock_with_key: Senha da conta criada. |
-| `status` | `number` | **Obrigatório**. :+1: status do estudante. |
+| `name` | `string` | **Obrigatório**.  Nome do estudante. |
+| `email` | `string` | **Obrigatório**.  Email do estudante. |
+| `Password` | `number` | **Obrigatório**.  Senha da conta criada. |
+| `status` | `number` | **Obrigatório**.  status do estudante. |
 
 ```
   POST /Login 
@@ -51,8 +51,8 @@ dotnet run
 
 | Parâmetro   | Tipo       | Descrição                           |
 | :---------- | :--------- | :---------------------------------- |
-| `email` | `string` | **Obrigatório**. :mailbox: Seu email. |
-| `password` | `string` | **Obrigatório**.:closed_lock_with_key: Sua senha. |
+| `email` | `string` | **Obrigatório**.  Seu email. |
+| `password` | `string` | **Obrigatório**. Sua senha. |
 | ` Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
 
 :exclamation::exclamation: Retorna Token 
@@ -62,20 +62,72 @@ dotnet run
 ```
 | Parâmetro   | Tipo       | Descrição                           |
 | :---------- | :--------- | :---------------------------------- |
-| `name` | `string` | **Obrigatório**. :information_desk_person: Nome do estudante. |
-| `email` | `string` | **Obrigatório**. :mailbox: Email do estudante. |
-| `password` | `number` | **Obrigatório**. :closed_lock_with_key:Senha da conta criada. |
-| `status` | `number` | **Obrigatório**.  :+1: status do estudante. |
+| `name` | `string` | **Obrigatório**. : Nome do estudante. |
+| `email` | `string` | **Obrigatório**. : Email do estudante. |
+| `password` | `number` | **Obrigatório**. :Senha da conta criada. |
+| `status` | `number` | **Obrigatório**.   status do estudante. |
 | ` Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
 
 ```
   DELETE/Student/:id
 ```
 | `Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
+:exclamation::exclamation: Ao deletar um estudanten todos os seus post criados são deletados.
 
 ##
 ### :page_facing_up: Posts :page_facing_up:
 
+```
+  GET /Post
+```
+```
+  GET /Post/:id
+```
+```
+  GET /Post/Student/:id
+```
+```
+  GET /Post/Last/Student/:id
+```
+```
+  GET /Post/StudentName
+```
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `name` | `string` | **Obrigatório**.  Nome do estudante. |
+```
+  /Post/Last/StudentName
+```
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `name` | `string` | **Obrigatório**.  Nome do estudante. |
+```
+  POST /Post
+```
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `content` | `string` | **Obrigatório**. Texto da postagem. |
+| `image` | `string` |  Imagem a ser postada |
+| `studentEmail` | `number` | **Obrigatório**. Email do estudante |
+| ` Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
+
+```
+  PUT /Post/:id 
+```
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `content` | `string` | **Obrigatório**. Texto da postagem. |
+| `image` | `string` |  Imagem a ser postada |
+| `studentEmail` | `number` |**Obrigatório**. Email do estudante |
+| ` Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
+
+```
+  DELETE /Post/:id 
+```
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `studentEmail` | `number` | Email do estudante |
+| ` Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
 
 ## 🧪 Executando os testes
 
