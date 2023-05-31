@@ -53,13 +53,18 @@ Testes de cobertura:
 ```
   GET /Students 
 ```
+ ```
+  GET /Student/:id
+```
+```
+  GET /Student/Name/
+```
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `name` | `string` | **Obrigatório**.  Nome do estudante. |
 
-```
-  GET /Student/Name/:name 
-```
-```
-  GET /Student/Id/:id
-```
+
+
 ```
   POST /Student
 ```
