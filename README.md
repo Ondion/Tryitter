@@ -20,7 +20,7 @@ dotnet restore
 dotnet run
 ```
 ## 🕵 Diagrama UML da API <br>
-![Tryitter drawio (1)](https://github.com/Ondion/Tryitter/assets/65035109/fcd18d95-7a40-4cd5-bb9a-8596637a9581)
+![Tryitter drawio](https://github.com/Ondion/Tryitter/assets/65035109/3860ccf7-2e45-46f2-953b-e73000107130)
 
 ## 🧪 Executando os testes
 
