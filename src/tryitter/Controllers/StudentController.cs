@@ -41,8 +41,8 @@ public class StudentController : ControllerBase
   }
 
   [HttpDelete("{id}")]
-  [Authorize(Policy = "StudentName")]
-  //!retornar e ver cascade e policy
+  [Authorize]
+
   public IActionResult DeleteStudent(int id)
   {
     if (_repository.GetStudentById(id) == null)

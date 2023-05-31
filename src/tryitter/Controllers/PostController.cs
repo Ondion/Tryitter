@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using tryitter.Models;
 using tryitter.Repository;
 using tryitter.Entities;
 using System.Text.Json;
@@ -38,9 +37,9 @@ public class PostController : ControllerBase
   [Authorize]
   public IActionResult DeletePost(int id, [FromBody] JsonElement studentEmail)
   {
-    string jsonBody = System.Text.Json.JsonSerializer.Serialize(studentEmail);
-    var stringStudentEmail = jsonBody.Split('"');
-    var response = _repository.DeletePost(id, stringStudentEmail[3]);
+    string jsonBody = JsonSerializer.Serialize(studentEmail);
+    var stringsStudentEmail = jsonBody.Split('"');
+    var response = _repository.DeletePost(id, stringsStudentEmail[3]);
     if (response == "Post not found") return BadRequest(response);
     if (response == "Not Alowed") return Unauthorized(response);
     return Ok(response);
@@ -60,7 +59,6 @@ public class PostController : ControllerBase
     return Ok(post);
   }
 
-
   [HttpGet("Student/{id}")]
   public IActionResult GetPostByStudentId(int id)
   {
@@ -75,18 +73,22 @@ public class PostController : ControllerBase
     return Ok(post);
   }
 
-  // [HttpGet("StudentName/{name}")]
-  // public IActionResult GetPostByStudentName(string name)
-  // {
-  //     var posts = _repository.GetPostByStudentName(name);
-  //     return Ok(posts);
-  // }
+  [HttpGet("StudentName")]
+  public IActionResult GetPostByStudentName([FromBody] JsonElement name)
+  {
+    string jsonBody = JsonSerializer.Serialize(name);
+    var stringsStudentName = jsonBody.Split('"');
+    var posts = _repository.GetPostByStudentName(stringsStudentName[3]);
+    return Ok(posts);
+  }
 
-  // [HttpGet("Last/StudentName/{name}")]
-  // public IActionResult GetLastPostByStudentName(string name)
-  // {
-  //     var post = _repository.GetLastPostByStudentName(name);
-  //     return Ok(post);
-  // }
+  [HttpGet("Last/StudentName")]
+  public IActionResult GetLastPostByStudentName([FromBody] JsonElement name)
+  {
+    string jsonBody = JsonSerializer.Serialize(name);
+    var stringsStudentName = jsonBody.Split('"');
+    var post = _repository.GetLastPostByStudentName(stringsStudentName[3]);
+    return Ok(post);
+  }
 
 }
