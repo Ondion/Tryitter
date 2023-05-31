@@ -22,9 +22,34 @@ dotnet run
 ## 🕵 Diagrama UML da API <br>
 ![Tryitter drawio (1)](https://github.com/Ondion/Tryitter/assets/65035109/fcd18d95-7a40-4cd5-bb9a-8596637a9581)
 
+## 🧪 Executando os testes
+
+Entre na pasta dos testes ```cd src/triytter.test```
+
+```
+dotnet test
+```
+
+Testes de cobertura:
+
+```
+
+```
+## :hammer: Deploy
+>O deploy da aplicação foi executado utilizando o Microsoft Azure <br>
+>Os links do deploy são:<br>
+### Backend
+`https://tryitter.azurewebsites.net/` 
+### Banco de dados:
+`https://tryitter.database.windows.net`
+
+
 ## 🔎 Documentação da API
 
-### :runner: Students :runner:
+
+<details>
+<summary><strong> :runner: Students :runner:</strong></summary><br/>
+ 
 ```
   GET /Students 
 ```
@@ -73,9 +98,11 @@ dotnet run
 ```
 | `Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
 :exclamation::exclamation: Ao deletar um estudanten todos os seus post criados são deletados.
+</details>
 
-##
-### :page_facing_up: Posts :page_facing_up:
+<details>
+<summary><strong> :page_facing_up: Posts :page_facing_up:</strong></summary><br/>
+
 
 ```
   GET /Post
@@ -128,20 +155,14 @@ dotnet run
 | :---------- | :--------- | :---------------------------------- |
 | `studentEmail` | `number` | Email do estudante |
 | ` Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
+ 
+</details>
 
-## 🧪 Executando os testes
+## :pencil2: Projeto Executado por:
 
-Entre na pasta dos testes ```cd src/triytter.test```
-
-```
-dotnet test
-```
-
-Testes de cobertura:
-
-```
-
-```
+ Tamires Sousa [GitHub ](https://github.com/tamireshc)| [Linkedin](https://www.linkedin.com/in/tamires-s/)  <br>
+ Fábio Xavier [GitHub ](https://github.com/Ondion) | [Linkedin ](https://www.linkedin.com/in/fabionxavier/) 
+ 
 
 
 
