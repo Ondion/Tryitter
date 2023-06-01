@@ -34,6 +34,7 @@ namespace tryitter.Repository
     {
       var oldPost = _context.Posts.AsNoTracking().Where(c => c.PostId == id).FirstOrDefault();
       var student = _context.Students.AsNoTracking().Where(c => c.Email == postRequest.StudentEmail).FirstOrDefault();
+      if (oldPost == null) return "Post not found";
       if (oldPost.StudentId != student.StudentId) return "Not Alowed";
       var post = new Post
       {

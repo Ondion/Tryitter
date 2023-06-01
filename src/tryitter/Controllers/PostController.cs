@@ -32,6 +32,7 @@ public class PostController : ControllerBase
   {
     var response = _postRepository.UpdatePost(id, postRequest);
     if (response == "Not Alowed") return Unauthorized(response);
+    if (response == "Post not found") return BadRequest(response);
     return Ok(response);
   }
 
