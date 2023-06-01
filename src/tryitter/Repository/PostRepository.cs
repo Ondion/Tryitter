@@ -82,18 +82,10 @@ namespace tryitter.Repository
       return listPosts;
     }
     //Get post by postId
-    public PostResponse GetPostById(int id)
+    public Post GetPostById(int id)
     {
       var post = _context.Posts.Find(id);
-
-      var postResponse = new PostResponse(
-          post.PostId,
-          post.Content,
-          post.CreatAt,
-          post.UpdatetAt,
-          post.Image,
-          post.StudentId);
-      return postResponse;
+      return post;
     }
 
     //Get all posts done by a studentId 

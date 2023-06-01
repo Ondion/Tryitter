@@ -61,18 +61,17 @@ public class StudentController : ControllerBase
   public IActionResult GetStudent(int id)
   {
     var student = _repository.GetStudentById(id);
-    if (student != null)
+    if (student == null) return BadRequest(ErrorStudentNotFound);
+    var studentResult = new StudentResponse
     {
-      var studentResult = new StudentResponse
-      {
-        StudentId = student.StudentId,
-        Name = student.Name,
-        Email = student.Email,
-        Status = student.Status,
-      };
-      return Ok(studentResult);
-    }
-    return BadRequest(ErrorStudentNotFound);
+
+      StudentId = student.StudentId,
+      Name = student.Name,
+      Email = student.Email,
+      Status = student.Status,
+    };
+    return Ok(studentResult);
+
   }
 
   [HttpGet("Name")]

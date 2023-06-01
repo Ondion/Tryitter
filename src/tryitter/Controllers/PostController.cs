@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using tryitter.Repository;
 using tryitter.Entities;
 using System.Text.Json;
+using tryitter.Models;
 
 namespace tryitter.Controllers;
 
@@ -58,8 +59,16 @@ public class PostController : ControllerBase
   [HttpGet("{id}")]
   public IActionResult GetPostsById(int id)
   {
-    var post = _postRepository.GetPostById(id);
-    return Ok(post);
+    var response = _postRepository.GetPostById(id);
+    if (response == null) return BadRequest(response);
+    var postResponse = new PostResponse(
+    response.PostId,
+    response.Content,
+    response.CreatAt,
+    response.UpdatetAt,
+    response.Image,
+    response.StudentId);
+    return Ok(postResponse);
   }
 
   [HttpGet("Student/{id}")]
