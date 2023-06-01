@@ -57,7 +57,7 @@ public class PostController : ControllerBase
   }
 
   [HttpGet("{id}")]
-  public IActionResult GetPostsById(int id)
+  public IActionResult GetPostById(int id)
   {
     var response = _postRepository.GetPostById(id);
     if (response == null) return BadRequest(response);
