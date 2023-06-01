@@ -11,93 +11,94 @@ namespace tryitter.Controllers;
 [Route("[controller]")]
 public class StudentController : ControllerBase
 {
-    private readonly StudentRepository _repository;
-    public StudentController(StudentRepository repository)
-    {
-        _repository = repository;
-    }
+  private readonly StudentRepository _repository;
+  public StudentController(StudentRepository repository)
+  {
+    _repository = repository;
+  }
 
-    [HttpPost]
-    public IActionResult CreateStudent(Student student)
-    {
-        var response = _repository.AddStudent(student);
-        if (response == "Email already exists") return BadRequest(response);
-        return Ok(response);
-    }
+  [HttpPost]
+  public IActionResult CreateStudent(Student student)
+  {
+    var response = _repository.AddStudent(student);
+    if (response == "Email already exists") return BadRequest(response);
+    return Ok(response);
+  }
 
-    [HttpPost("/Login")]
-    public IActionResult Login(StudentLogin studentlogin)
-    {
-        var token = _repository.Login(studentlogin);
-        return Ok(token);
-    }
+  [HttpPost("/Login")]
+  public IActionResult Login(StudentLogin studentlogin)
+  {
+    var response = _repository.Login(studentlogin);
+    return Ok(response);
+  }
 
-    [HttpPut("{id}")]
-    [Authorize]
-    public IActionResult UpdateStudent(int id, Student student)
-    {
-        var response = _repository.UpdateStudent(id, student);
-        if (response == "Email already exists") return BadRequest(response);
-        return Ok(response);
-    }
+  [HttpPut("{id}")]
+  [Authorize]
+  public IActionResult UpdateStudent(int id, Student student)
+  {
+    var response = _repository.UpdateStudent(id, student);
+    if (response == "Student not found") return BadRequest(response);
+    if (response == "Email already exists") return BadRequest(response);
+    return Ok(response);
+  }
 
-    [HttpDelete("{id}")]
-    [Authorize]
+  [HttpDelete("{id}")]
+  [Authorize]
 
-    public IActionResult DeleteStudent(int id)
+  public IActionResult DeleteStudent(int id)
+  {
+    if (_repository.GetStudentById(id) == null)
     {
-        if (_repository.GetStudentById(id) == null)
-        {
-            return BadRequest("student not found");
-        }
-        var student = _repository.GetStudentById(id);
-        var response = _repository.DeleteStudent(student);
-        return Ok(response);
+      return BadRequest("Student not found");
     }
+    var student = _repository.GetStudentById(id);
+    var response = _repository.DeleteStudent(student);
+    return Ok(response);
+  }
 
-    [HttpGet("{id}")]
-    public IActionResult GetStudent(int id)
+  [HttpGet("{id}")]
+  public IActionResult GetStudent(int id)
+  {
+    var student = _repository.GetStudentById(id);
+    if (student != null)
     {
-        var student = _repository.GetStudentById(id);
-        if (student != null)
-        {
-            var studentResult = new StudentResponse
-            {
-                StudentId = student.StudentId,
-                Name = student.Name,
-                Email = student.Email,
-                Status = student.Status,
-            };
-            return Ok(studentResult);
-        }
-        return BadRequest("student not found");
+      var studentResult = new StudentResponse
+      {
+        StudentId = student.StudentId,
+        Name = student.Name,
+        Email = student.Email,
+        Status = student.Status,
+      };
+      return Ok(studentResult);
     }
+    return BadRequest("Student not found");
+  }
 
-    [HttpGet("Name")]
-    public IActionResult GetStudent([FromBody] JsonElement name)
+  [HttpGet("Name")]
+  public IActionResult GetStudent([FromBody] JsonElement name)
+  {
+    string jsonBody = JsonSerializer.Serialize(name);
+    var stringsStudentName = jsonBody.Split('"');
+    var student = _repository.GetStudent(stringsStudentName[3]);
+    if (student != null)
     {
-        string jsonBody = JsonSerializer.Serialize(name);
-        var stringsStudentName = jsonBody.Split('"');
-        var student = _repository.GetStudent(stringsStudentName[3]);
-        if (student != null)
-        {
-            var studentResult = new StudentResponse
-            {
-                StudentId = student.StudentId,
-                Name = student.Name,
-                Email = student.Email,
-                Status = student.Status,
-            };
-            return Ok(studentResult);
-        }
-        return BadRequest("student not found");
+      var studentResult = new StudentResponse
+      {
+        StudentId = student.StudentId,
+        Name = student.Name,
+        Email = student.Email,
+        Status = student.Status,
+      };
+      return Ok(studentResult);
     }
+    return BadRequest("Student not found");
+  }
 
-    [HttpGet]
-    public IActionResult GetAllStudents()
-    {
-        var students = _repository.GetAllStudents();
-        return Ok(students);
-    }
+  [HttpGet]
+  public IActionResult GetAllStudents()
+  {
+    var students = _repository.GetAllStudents();
+    return Ok(students);
+  }
 
 }
