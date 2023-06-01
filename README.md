@@ -101,7 +101,7 @@ Testes de cobertura:
 ```
   DELETE/Student/:id
 ```
-| `Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |
+| `Authorization`      | `string` | **Obrigatório**. :key: Token do login deve ser passado no header. |<br>
 :exclamation::exclamation: Ao deletar um estudanten todos os seus post criados são deletados.<br>
 </details>
 
