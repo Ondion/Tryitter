@@ -11,6 +11,7 @@ namespace tryitter.Controllers;
 [Route("[controller]")]
 public class StudentController : ControllerBase
 {
+  private const string ErrorStudentNotFound = "Student not found";
   private readonly StudentRepository _repository;
   public StudentController(StudentRepository repository)
   {
@@ -49,7 +50,7 @@ public class StudentController : ControllerBase
   {
     if (_repository.GetStudentById(id) == null)
     {
-      return BadRequest("Student not found");
+      return BadRequest(ErrorStudentNotFound);
     }
     var student = _repository.GetStudentById(id);
     var response = _repository.DeleteStudent(student);
@@ -71,7 +72,7 @@ public class StudentController : ControllerBase
       };
       return Ok(studentResult);
     }
-    return BadRequest("Student not found");
+    return BadRequest(ErrorStudentNotFound);
   }
 
   [HttpGet("Name")]
@@ -91,7 +92,7 @@ public class StudentController : ControllerBase
       };
       return Ok(studentResult);
     }
-    return BadRequest("Student not found");
+    return BadRequest(ErrorStudentNotFound);
   }
 
   [HttpGet]
