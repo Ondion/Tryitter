@@ -34,6 +34,7 @@ namespace tryitter.Repository
     {
       var oldPost = _context.Posts.AsNoTracking().Where(c => c.PostId == id).FirstOrDefault();
       var student = _context.Students.AsNoTracking().Where(c => c.Email == postRequest.StudentEmail).FirstOrDefault();
+      if (oldPost == null) return "Post not found";
       if (oldPost.StudentId != student.StudentId) return "Not Alowed";
       var post = new Post
       {
@@ -81,18 +82,10 @@ namespace tryitter.Repository
       return listPosts;
     }
     //Get post by postId
-    public PostResponse GetPostById(int id)
+    public Post GetPostById(int id)
     {
       var post = _context.Posts.Find(id);
-
-      var postResponse = new PostResponse(
-          post.PostId,
-          post.Content,
-          post.CreatAt,
-          post.UpdatetAt,
-          post.Image,
-          post.StudentId);
-      return postResponse;
+      return post;
     }
 
     //Get all posts done by a studentId 
