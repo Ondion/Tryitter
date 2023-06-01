@@ -10,17 +10,19 @@ namespace tryitter.Controllers;
 [Route("[controller]")]
 public class PostController : ControllerBase
 {
-  private readonly PostRepository _repository;
-  public PostController(PostRepository repository)
+  private readonly PostRepository _postRepository;
+  private readonly StudentRepository _studentRepository;
+  public PostController(PostRepository repository, StudentRepository studentRepository)
   {
-    _repository = repository;
+    _postRepository = repository;
+    _studentRepository = studentRepository;
   }
 
   [HttpPost]
   [Authorize]
   public IActionResult CreatePost(PostRequest postRequest)
   {
-    var postCreated = _repository.CreatePost(postRequest);
+    var postCreated = _postRepository.CreatePost(postRequest);
     return Ok(postCreated);
   }
 
@@ -28,7 +30,7 @@ public class PostController : ControllerBase
   [Authorize]
   public IActionResult UpdatePost(int id, PostRequest postRequest)
   {
-    var response = _repository.UpdatePost(id, postRequest);
+    var response = _postRepository.UpdatePost(id, postRequest);
     if (response == "Not Alowed") return Unauthorized(response);
     return Ok(response);
   }
@@ -39,7 +41,7 @@ public class PostController : ControllerBase
   {
     string jsonBody = JsonSerializer.Serialize(studentEmail);
     var stringsStudentEmail = jsonBody.Split('"');
-    var response = _repository.DeletePost(id, stringsStudentEmail[3]);
+    var response = _postRepository.DeletePost(id, stringsStudentEmail[3]);
     if (response == "Post not found") return BadRequest(response);
     if (response == "Not Alowed") return Unauthorized(response);
     return Ok(response);
@@ -48,37 +50,50 @@ public class PostController : ControllerBase
   [HttpGet]
   public IActionResult GetAllPosts()
   {
-    var posts = _repository.GetAllPosts();
+    var posts = _postRepository.GetAllPosts();
     return Ok(posts);
   }
 
   [HttpGet("{id}")]
   public IActionResult GetPostsById(int id)
   {
-    var post = _repository.GetPostById(id);
+    var post = _postRepository.GetPostById(id);
     return Ok(post);
   }
 
   [HttpGet("Student/{id}")]
   public IActionResult GetPostByStudentId(int id)
   {
-    var posts = _repository.GetPostByStudentId(id);
+    if (_studentRepository.GetStudentById(id) == null)
+    {
+      return BadRequest("Student not found");
+    }
+    var posts = _postRepository.GetPostByStudentId(id);
     return Ok(posts);
   }
 
   [HttpGet("Last/Student/{id}")]
   public IActionResult GetLastPostByStudentId(int id)
   {
-    var post = _repository.GetLastPostByStudentId(id);
+    if (_studentRepository.GetStudentById(id) == null)
+    {
+      return BadRequest("Student not found");
+    }
+    var post = _postRepository.GetLastPostByStudentId(id);
     return Ok(post);
   }
 
   [HttpGet("StudentName")]
   public IActionResult GetPostByStudentName([FromBody] JsonElement name)
   {
+
     string jsonBody = JsonSerializer.Serialize(name);
     var stringsStudentName = jsonBody.Split('"');
-    var posts = _repository.GetPostByStudentName(stringsStudentName[3]);
+    if (_studentRepository.GetStudent(stringsStudentName[3]) == null)
+    {
+      return BadRequest("Student not found");
+    }
+    var posts = _postRepository.GetPostByStudentName(stringsStudentName[3]);
     return Ok(posts);
   }
 
@@ -87,7 +102,11 @@ public class PostController : ControllerBase
   {
     string jsonBody = JsonSerializer.Serialize(name);
     var stringsStudentName = jsonBody.Split('"');
-    var post = _repository.GetLastPostByStudentName(stringsStudentName[3]);
+    if (_studentRepository.GetStudent(stringsStudentName[3]) == null)
+    {
+      return BadRequest("Student not found");
+    }
+    var post = _postRepository.GetLastPostByStudentName(stringsStudentName[3]);
     return Ok(post);
   }
 
