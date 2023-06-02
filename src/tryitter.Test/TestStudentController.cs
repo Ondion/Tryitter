@@ -5,8 +5,8 @@ using tryitter.Test;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
-
+using tryitter.Services;
+using tryitter.Models;
 
 namespace tryitter.Test;
 
@@ -20,8 +20,9 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
   }
 
   [Fact]
-  public async Task CreateStudentShouldReturnStatus200AndCorrectStringResponse()
+  public async Task CreateStudent()
   {
+    //Create Student
     var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"x@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
     var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
     var result = await _client.PostAsync("/Student", stringContent);
@@ -32,9 +33,11 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
     await _client.DeleteAsync("/Student/1");
 
   }
+
   [Fact]
-  public async Task CreateStudentWithExistentEmailShouldReturnStatus400AndCorrectStringResponse()
+  public async Task CreateStudentWithExistingEmail()
   {
+    //Create Student
     var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
     var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
     var result = await _client.PostAsync("/Student", stringContent);
@@ -47,10 +50,11 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
     //Reset DB
     await _client.DeleteAsync("/Student/1");
   }
+
   [Fact]
   public async Task LoginWithAExistingStudent()
   {
-    //Create user
+    //Create Student
     var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
     var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
     var result = await _client.PostAsync("/Student", stringContent);
@@ -63,10 +67,11 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
     //Reset DB
     await _client.DeleteAsync("/Student/1");
   }
+
   [Fact]
   public async Task LoginWithANonExistingStudent()
   {
-    //Create user
+    //Create Student
     var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
     var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
     var result = await _client.PostAsync("/Student", stringContent);
@@ -81,4 +86,94 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
     //Reset DB
     await _client.DeleteAsync("/Student/1");
   }
+
+  [Fact]
+  public async Task GetAllStudents()
+  {
+    //Create 2 Students
+    var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
+    var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    await _client.PostAsync("/Student", stringContent);
+
+    var jsonToAdd2 = "{\"name\":\"Paulo\",\"email\":\"paulo@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focado\"}";
+    var stringContent2 = new StringContent(jsonToAdd2, Encoding.UTF8, "application/json");
+    await _client.PostAsync("/Student", stringContent2);
+    //login
+    var getAllStudentsResult = await _client.GetAsync("/Student");
+    getAllStudentsResult.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var getAllStudentsResultString = getAllStudentsResult.Content.ReadAsStringAsync().Result;
+    getAllStudentsResultString.Should().Be("[{\"studentId\":1,\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"status\":\"Focada\"},{\"studentId\":2,\"name\":\"Paulo\",\"email\":\"paulo@gmail.com\",\"status\":\"Focado\"}]");
+    //Reset DB
+    await _client.DeleteAsync("/Student/1");
+    await _client.DeleteAsync("/Student/2");
+  }
+
+  [Fact]
+  public async Task GetStudentWithACorrectId()
+  {
+    //Create Student
+    var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
+    var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    var result = await _client.PostAsync("/Student", stringContent);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    //GetStudentById
+    var resultgetStudentById = await _client.GetAsync("Student/1");
+    resultgetStudentById.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var resultgetStudentByIdString = resultgetStudentById.Content.ReadAsStringAsync().Result;
+    resultgetStudentByIdString.Should().Be("{\"studentId\":1,\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"status\":\"Focada\"}");
+    //Reset DB
+    await _client.DeleteAsync("/Student/1");
+  }
+
+  [Fact]
+  public async Task GetStudentWithANonExintingId()
+  {
+    //GetStudentByWrongId
+    var resultgetStudentById = await _client.GetAsync("Student/99");
+    resultgetStudentById.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var resultgetStudentByIdString = resultgetStudentById.Content.ReadAsStringAsync().Result;
+    resultgetStudentByIdString.Should().Be("Student not found");
+  }
+
+  [Fact]
+  public async Task DeleteStudentWithACorrectId()
+  {
+    var student = new Student { Name = "Ana", Email = "an@gmail.com", Password = "xft@ff", Status = "Focada" };
+    //Create Student
+    var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
+    var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    var result = await _client.PostAsync("/Student", stringContent);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    //DeleteStudent
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    var resultDeleteStudent = await _client.DeleteAsync("Student/1");
+    resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var resultDeleteStudentString = resultDeleteStudent.Content.ReadAsStringAsync().Result;
+    resultDeleteStudentString.Should().Be("student remove");
+  }
+
+  [Fact]
+  public async Task DeleteStudentWithANonExitingId()
+  {
+    var student = new Student { Name = "Ana", Email = "an@gmail.com", Password = "xft@ff", Status = "Focada" };
+
+    //DeleteStudent
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    var resultDeleteStudent = await _client.DeleteAsync("Student/99");
+    resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var resultDeleteStudentString = resultDeleteStudent.Content.ReadAsStringAsync().Result;
+    resultDeleteStudentString.Should().Be("Student not found");
+  }
+
+  [Fact]
+  public async Task DeleteStudentWithoutToken()
+  {
+    //DeleteStudent
+    var resultDeleteStudent = await _client.DeleteAsync("Student/1");
+    resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
+  }
+
+  //!falta o update e o get com nome
 }
