@@ -79,12 +79,12 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
   [Fact]
   public async Task LoginWithAExistingStudent()
   {
-    //login
-    // var jsonToAddLogin = "{\"name\":\"Joao\",\"password\":\"xft@ff\"}";
-    // var stringContentLogin = new StringContent(jsonToAddLogin, Encoding.UTF8, "application/json");
-    // var resultLogin = await _client.PostAsync("/Login", stringContentLogin);
-    // resultLogin.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
-    //Reset DB
+    // login
+    var jsonToAddLogin = "{\"name\":\"ana\",\"password\":\"xft@ff\"}";
+    var stringContentLogin = new StringContent(jsonToAddLogin, Encoding.UTF8, "application/json");
+    var resultLogin = await _client.PostAsync("/Login", stringContentLogin);
+    resultLogin.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    // Reset DB
     // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     // await _client.DeleteAsync("/Student/1");
   }
@@ -113,80 +113,85 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
     // var stringContent2 = new StringContent(jsonToAdd2, Encoding.UTF8, "application/json");
     // await _client.PostAsync("/Student", stringContent2);
     //login
-    // var getAllStudentsResult = await _client.GetAsync("/Student");
-    // getAllStudentsResult.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
-    // var getAllStudentsResultString = getAllStudentsResult.Content.ReadAsStringAsync().Result;
-    // getAllStudentsResultString.Should().Be("[{\"studentId\":1,\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"status\":\"Focada\"},{\"studentId\":2,\"name\":\"Paulo\",\"email\":\"paulo@gmail.com\",\"status\":\"Focado\"}]");
+    var getAllStudentsResult = await _client.GetAsync("/Student");
+    getAllStudentsResult.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var getAllStudentsResultString = getAllStudentsResult.Content.ReadAsStringAsync().Result;
+    getAllStudentsResultString.Should().Be("[{\"studentId\":1,\"name\":\"Ana\",\"email\":\"ana@gmail.com\",\"status\":\"Focada\"},{\"studentId\":2,\"name\":\"Paulo\",\"email\":\"paulo@gmail.com\",\"status\":\"Focada\"},{\"studentId\":3,\"name\":\"Tom\",\"email\":\"tom@gmail.com\",\"status\":\"Focada\"},{\"studentId\":4,\"name\":\"Joao\",\"email\":\"joao@gmail.com\",\"status\":\"Focada\"}]");
     //Reset DB
     // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     // await _client.DeleteAsync("/Student/1");
     // await _client.DeleteAsync("/Student/2");
   }
 
-  // [Fact]
-  // public async Task GetStudentWithACorrectId()
-  // {
-  //   //Create Student
-  //   var jsonToAdd = "{\"name\":\"Maria\",\"email\":\"maria@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
-  //   var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
-  //   var result = await _client.PostAsync("/Student", stringContent);
-  //   result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
-  //   //GetStudentById
-  //   var resultGetStudentById = await _client.GetAsync("Student/1");
-  //   resultGetStudentById.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
-  //   var resultGetStudentByIdString = resultGetStudentById.Content.ReadAsStringAsync().Result;
-  //   resultGetStudentByIdString.Should().Contains("");
-  //   //Reset DB
-  //   _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-  //   await _client.DeleteAsync("/Student/1");
+  [Fact]
+  public async Task GetStudentWithACorrectId()
+  {
+    //Create Student
+    // var jsonToAdd = "{\"name\":\"Maria\",\"email\":\"maria@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
+    // var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    // var result = await _client.PostAsync("/Student", stringContent);
+    // result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    //GetStudentById
+    var resultGetStudentById = await _client.GetAsync("Student/1");
+    resultGetStudentById.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var resultGetStudentByIdString = resultGetStudentById.Content.ReadAsStringAsync().Result;
+    resultGetStudentByIdString.Should().Be("{\"studentId\":1,\"name\":\"Ana\",\"email\":\"ana@gmail.com\",\"status\":\"Focada\"}");
+    //Reset DB
+    // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    // await _client.DeleteAsync("/Student/1");
 
 
-  // }
+  }
 
-  // [Fact]
-  // public async Task GetStudentWithANonExintingId()
-  // {
-  //   //GetStudentByWrongId
-  //   var resultgetStudentById = await _client.GetAsync("Student/99");
-  //   resultgetStudentById.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
-  //   var resultgetStudentByIdString = resultgetStudentById.Content.ReadAsStringAsync().Result;
-  //   resultgetStudentByIdString.Should().Be("Student not found");
-  // }
+  [Fact]
+  public async Task GetStudentWithANonExintingId()
+  {
+    //GetStudentByWrongId
+    var resultgetStudentById = await _client.GetAsync("Student/99");
+    resultgetStudentById.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var resultgetStudentByIdString = resultgetStudentById.Content.ReadAsStringAsync().Result;
+    resultgetStudentByIdString.Should().Be("Student not found");
+  }
 
-  // [Fact]
-  // public async Task DeleteStudentWithACorrectId()
-  // {
-  //   //Create Student
-  //   var jsonToAdd = "{\"name\":\"Ana\",\"email\":\"an@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
-  //   var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
-  //   var result = await _client.PostAsync("/Student", stringContent);
-  //   result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
-  //   //DeleteStudent
-  //   _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-  //   var resultDeleteStudent = await _client.DeleteAsync("Student/1");
-  //   resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
-  //   var resultDeleteStudentString = resultDeleteStudent.Content.ReadAsStringAsync().Result;
-  //   resultDeleteStudentString.Should().Be("student remove");
-  // }
+  [Fact]
+  public async Task DeleteStudentWithACorrectId()
+  {
+    var student = new Student { Name = "Joaquim", Email = "joka@gmail.com", Password = "xft@ff", Status = "Focada" };
 
-  // [Fact]
-  // public async Task DeleteStudentWithANonExitingId()
-  // {
-  //   //DeleteStudent
-  //   _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-  //   var resultDeleteStudent = await _client.DeleteAsync("Student/99");
-  //   resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
-  //   var resultDeleteStudentString = resultDeleteStudent.Content.ReadAsStringAsync().Result;
-  //   resultDeleteStudentString.Should().Be("Student not found");
-  // }
+    //Create Student
+    var jsonToAdd = "{\"name\":\"Joaquim\",\"email\":\"joka@gmail.com\",\"password\":\"xft@ff\",\"status\":\"Focada\"}";
+    var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    var result = await _client.PostAsync("/Student", stringContent);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    //DeleteStudent
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    var resultDeleteStudent = await _client.DeleteAsync("Student/6");
+    resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var resultDeleteStudentString = resultDeleteStudent.Content.ReadAsStringAsync().Result;
+    resultDeleteStudentString.Should().Be("student remove");
+  }
 
-  // [Fact]
-  // public async Task DeleteStudentWithoutToken()
-  // {
-  //   //DeleteStudent
-  //   var resultDeleteStudent = await _client.DeleteAsync("Student/1");
-  //   resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
-  // }
+  [Fact]
+  public async Task DeleteStudentWithANonExitingId()
+  {
+    var student = new Student { Name = "Joaquim", Email = "joka@gmail.com", Password = "xft@ff", Status = "Focada" };
+    //DeleteStudent
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    var resultDeleteStudent = await _client.DeleteAsync("Student/99");
+    resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var resultDeleteStudentString = resultDeleteStudent.Content.ReadAsStringAsync().Result;
+    resultDeleteStudentString.Should().Be("Student not found");
+  }
+
+  [Fact]
+  public async Task DeleteStudentWithoutToken()
+  {
+    //DeleteStudent
+    var resultDeleteStudent = await _client.DeleteAsync("Student/1");
+    resultDeleteStudent.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
+  }
 
   //!falta o update e o get com nome
 }

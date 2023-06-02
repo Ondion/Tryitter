@@ -34,6 +34,7 @@ namespace tryitter.Repository
     public string Login(StudentLogin studentLogin)
     {
       var studentdb = GetStudent(studentLogin.Name);
+      if (studentdb == null) return "Student not found";
       if (studentdb.Name == studentLogin.Name && new Hash(SHA512.Create()).VerificarSenha(studentLogin.Password, studentdb.Password))
       {
         return new TokenGenerator().Generate(studentdb);
