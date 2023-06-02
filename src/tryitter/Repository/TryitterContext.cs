@@ -8,7 +8,9 @@ public class TryitterContext : DbContext
 
   public DbSet<Post>? Posts { get; set; }
   public DbSet<Student>? Students { get; set; }
-
+  public TryitterContext(DbContextOptions<TryitterContext> options)
+      : base(options) { }
+  public TryitterContext() { }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
@@ -17,7 +19,7 @@ public class TryitterContext : DbContext
       var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTION_STRING");
 
       // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=Password12;");
-      optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
+      // optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=tryitter;User=SA;Password=T@a202101;");
       //optionsBuilder.UseSqlServer(@"Server=tryitter.database.windows.net;Database=tryitter-DB;User=tryitter;Password=SenhadoDB123;");
     }
   }
