@@ -30,6 +30,7 @@ public class StudentController : ControllerBase
   public IActionResult Login(StudentLogin studentlogin)
   {
     var response = _repository.Login(studentlogin);
+    if (response == "Student not found") return BadRequest(response);
     return Ok(response);
   }
 
