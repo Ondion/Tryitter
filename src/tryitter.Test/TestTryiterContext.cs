@@ -21,7 +21,7 @@ public class TestTryitterContext<TEntryPoint> : WebApplicationFactory<Program> w
         services.Remove(descriptor);
       services.AddDbContext<TryitterContext>(options =>
           {
-            options.UseInMemoryDatabase("databaseName");
+            options.UseInMemoryDatabase("db");
           });
       var sp = services.BuildServiceProvider();
       using (var scope = sp.CreateScope())
@@ -29,7 +29,16 @@ public class TestTryitterContext<TEntryPoint> : WebApplicationFactory<Program> w
       {
         try
         {
+          appContext.Database.EnsureDeleted();
+
           appContext.Database.EnsureCreated();
+          appContext.Students.AddRange(
+            new Student { Name = "Ana", Email = "ana@gmail.com", Password = "xft@ff", Status = "Focada" },
+            new Student { Name = "Paulo", Email = "paulo@gmail.com", Password = "xft@ff", Status = "Focada" },
+            new Student { Name = "Tom", Email = "tom@gmail.com", Password = "xft@ff", Status = "Focada" },
+            new Student { Name = "Joao", Email = "joao@gmail.com", Password = "xft@ff", Status = "Focada" }
+            );
+          appContext.SaveChanges();
         }
         catch (Exception e)
         {
