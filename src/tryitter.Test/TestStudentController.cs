@@ -42,8 +42,8 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
     //add same student twice
     var resultAddSameUserTwice = await _client.PostAsync("/Student", stringContent);
     resultAddSameUserTwice.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
-    var test = resultAddSameUserTwice.Content.ReadAsStringAsync().Result;
-    test.Should().Be("Email already exists");
+    var resultAddSameUserTwiceString = resultAddSameUserTwice.Content.ReadAsStringAsync().Result;
+    resultAddSameUserTwiceString.Should().Be("Email already exists");
     //Reset DB
     await _client.DeleteAsync("/Student/1");
   }
@@ -76,6 +76,8 @@ public class TestStudentController : IClassFixture<TestTryitterContext<Program>>
     var stringContentLogin = new StringContent(jsonToAddLoginWithError, Encoding.UTF8, "application/json");
     var resultLogin = await _client.PostAsync("/Login", stringContentLogin);
     resultLogin.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var resultLoginString = resultLogin.Content.ReadAsStringAsync().Result;
+    resultLoginString.Should().Be("Student not found");
     //Reset DB
     await _client.DeleteAsync("/Student/1");
   }
