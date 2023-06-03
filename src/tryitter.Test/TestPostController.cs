@@ -59,4 +59,47 @@ public class TestPostController : IClassFixture<TestTryitterContext<Program>>
     stringResult.Should().Be("Post updated");
   }
 
+  [Fact]
+  public async Task UpdatePostWithouToken()
+  {
+    //Update Post
+    var jsonToAdd = "{\"content\":\"Texto 1-1\",\"image\":\"string\",\"studentEmail\":\"ana@gmail.com\"}";
+    var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    var result = await _client.PutAsync("/Post/1", stringContent);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
+  }
+  [Fact]
+  public async Task UpdateANonStudentPost()
+  {
+    var student = new Student { Name = "Paulo", Email = "paulo@gmail.com", Password = "xft@ff", Status = "Focada" };
+    //Update Post
+    var jsonToAdd = "{\"content\":\"Texto 1-1\",\"image\":\"string\",\"studentEmail\":\"paulo@gmail.com\"}";
+    var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    //token for request
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+    var result = await _client.PutAsync("/Post/1", stringContent);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("Not Alowed");
+  }
+
+  [Fact]
+  public async Task UpdateANonExintingPost()
+  {
+    var student = new Student { Name = "Paulo", Email = "paulo@gmail.com", Password = "xft@ff", Status = "Focada" };
+    //Update Post
+    var jsonToAdd = "{\"content\":\"Texto 1-1\",\"image\":\"string\",\"studentEmail\":\"paulo@gmail.com\"}";
+    var stringContent = new StringContent(jsonToAdd, Encoding.UTF8, "application/json");
+    //token for request
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+    var result = await _client.PutAsync("/Post/99", stringContent);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("Post not found");
+  }
+
 }
