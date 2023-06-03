@@ -39,6 +39,13 @@ public class TestTryitterContext<TEntryPoint> : WebApplicationFactory<Program> w
             new Student { Name = "Joao", Email = "joao@gmail.com", Password = "xft@ff", Status = "Focada" }
             );
           appContext.SaveChanges();
+
+          appContext.Posts.AddRange(
+            new Post { Content = "Texto 1", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 3, 8, 35, 0), StudentId = 1 },
+            new Post { Content = "Texto 2", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 4, 8, 35, 0), StudentId = 1 },
+            new Post { Content = "Texto 2", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 5, 8, 35, 0), StudentId = 2 }
+          );
+          appContext.SaveChanges();
         }
         catch (Exception e)
         {
