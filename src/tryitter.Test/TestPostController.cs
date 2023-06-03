@@ -102,4 +102,78 @@ public class TestPostController : IClassFixture<TestTryitterContext<Program>>
     stringResult.Should().Be("Post not found");
   }
 
+  [Fact]
+  public async Task DeletePost()
+  {
+    var student = new Student { Name = "Paulo", Email = "paulo@gmail.com", Password = "xft@ff", Status = "Focada" };
+    //token for request
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    //Delete Post
+    var request = new HttpRequestMessage
+    {
+      Method = HttpMethod.Delete,
+      RequestUri = new Uri("/Post/3"),
+      Content = new StringContent("{\"studentEmail\":\"paulo@gmail.com\"}", Encoding.UTF8, "application/json"),
+    };
+    var result = await _client.SendAsync(request).ConfigureAwait(false);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("Post deleted");
+  }
+
+  [Fact]
+  public async Task DeletePostWithoutToken()
+  {
+    //Delete Post
+    var request = new HttpRequestMessage
+    {
+      Method = HttpMethod.Delete,
+      RequestUri = new Uri("/Post/3"),
+      Content = new StringContent("{\"studentEmail\":\"paulo@gmail.com\"}", Encoding.UTF8, "application/json"),
+    };
+    var result = await _client.SendAsync(request).ConfigureAwait(false);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
+  }
+
+  [Fact]
+  public async Task DeleteANonExintingPost()
+  {
+    var student = new Student { Name = "Paulo", Email = "paulo@gmail.com", Password = "xft@ff", Status = "Focada" };
+    //token for request
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    //Delete Post
+    var request = new HttpRequestMessage
+    {
+      Method = HttpMethod.Delete,
+      RequestUri = new Uri("/Post/99"),
+      Content = new StringContent("{\"studentEmail\":\"paulo@gmail.com\"}", Encoding.UTF8, "application/json"),
+    };
+    var result = await _client.SendAsync(request).ConfigureAwait(false);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("Post not found");
+  }
+
+  [Fact]
+  public async Task DeleteANonStudentPost()
+  {
+    var student = new Student { Name = "Paulo", Email = "paulo@gmail.com", Password = "xft@ff", Status = "Focada" };
+    //token for request
+    var token = new TokenGenerator().Generate(student);
+    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    //Delete Post
+    var request = new HttpRequestMessage
+    {
+      Method = HttpMethod.Delete,
+      RequestUri = new Uri("/Post/1"),
+      Content = new StringContent("{\"studentEmail\":\"paulo@gmail.com\"}", Encoding.UTF8, "application/json"),
+    };
+    var result = await _client.SendAsync(request).ConfigureAwait(false);
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("Not Alowed");
+  }
+
 }
