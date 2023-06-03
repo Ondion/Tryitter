@@ -176,4 +176,20 @@ public class TestPostController : IClassFixture<TestTryitterContext<Program>>
     stringResult.Should().Be("Not Alowed");
   }
 
+  [Fact]
+  public async Task GetPostById()
+  {
+    var result = await _client.GetAsync("Post/2");
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("{\"postId\":2,\"content\":\"Texto 2\",\"creatAt\":\"2022-10-02T08:35:00\",\"updatetAt\":\"2022-10-04T08:35:00\",\"image\":null,\"studentId\":1}");
+  }
+
+  [Fact]
+  public async Task GetPostByNonExintingId()
+  {
+    var result = await _client.GetAsync("Post/99");
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+  }
+
 }
