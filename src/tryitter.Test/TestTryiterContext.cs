@@ -43,7 +43,9 @@ public class TestTryitterContext<TEntryPoint> : WebApplicationFactory<Program> w
           appContext.Posts.AddRange(
             new Post { Content = "Texto 1", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 3, 8, 35, 0), StudentId = 1 },
             new Post { Content = "Texto 2", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 4, 8, 35, 0), StudentId = 2 },
-            new Post { Content = "Texto 3", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 5, 8, 35, 0), StudentId = 2 }
+            new Post { Content = "Texto 3", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 5, 8, 35, 0), StudentId = 2 },
+            new Post { Content = "Texto 4", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 5, 8, 35, 0), StudentId = 3 },
+            new Post { Content = "Texto 5", CreatAt = new DateTime(2022, 10, 2, 8, 35, 0), UpdatetAt = new DateTime(2022, 10, 6, 8, 35, 0), StudentId = 3 }
           );
           appContext.SaveChanges();
         }
