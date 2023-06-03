@@ -29,7 +29,13 @@ public class TestPostController : IClassFixture<TestTryitterContext<Program>>
     stringResult.Should().Be("Post Created");
     //Delete Post in inMemory DB
     _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    await _client.DeleteAsync("/Student/5");
+    var request = new HttpRequestMessage
+    {
+      Method = HttpMethod.Delete,
+      RequestUri = new Uri("/Post/4"),
+      Content = new StringContent("{\"studentEmail\":\"ana@gmail.com\"}", Encoding.UTF8, "application/json"),
+    };
+    await _client.SendAsync(request).ConfigureAwait(false);
   }
 
   [Fact]
@@ -182,7 +188,7 @@ public class TestPostController : IClassFixture<TestTryitterContext<Program>>
     var result = await _client.GetAsync("Post/2");
     result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
     var stringResult = result.Content.ReadAsStringAsync().Result;
-    stringResult.Should().Be("{\"postId\":2,\"content\":\"Texto 2\",\"creatAt\":\"2022-10-02T08:35:00\",\"updatetAt\":\"2022-10-04T08:35:00\",\"image\":null,\"studentId\":1}");
+    stringResult.Should().Be("{\"postId\":2,\"content\":\"Texto 2\",\"creatAt\":\"2022-10-02T08:35:00\",\"updatetAt\":\"2022-10-04T08:35:00\",\"image\":null,\"studentId\":2}");
   }
 
   [Fact]
@@ -191,5 +197,30 @@ public class TestPostController : IClassFixture<TestTryitterContext<Program>>
     var result = await _client.GetAsync("Post/99");
     result.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
   }
+
+  [Fact]
+  public async Task GetAllPosts()
+  {
+    var result = await _client.GetAsync("Post");
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+  }
+
+  [Fact]
+  public async Task GetPostsByStudentId()
+  {
+    var result = await _client.GetAsync("Post/Student/2");
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("[{\"postId\":3,\"content\":\"Texto 3\",\"creatAt\":\"2022-10-02T08:35:00\",\"updatetAt\":\"2022-10-05T08:35:00\",\"image\":null,\"studentId\":2},{\"postId\":2,\"content\":\"Texto 2\",\"creatAt\":\"2022-10-02T08:35:00\",\"updatetAt\":\"2022-10-04T08:35:00\",\"image\":null,\"studentId\":2}]");
+  }
+  [Fact]
+  public async Task GetPostsByNonExitingStudentId()
+  {
+    var result = await _client.GetAsync("Post/Student/99");
+    result.StatusCode.Should().Be((System.Net.HttpStatusCode)400);
+    var stringResult = result.Content.ReadAsStringAsync().Result;
+    stringResult.Should().Be("Student not found");
+  }
+
 
 }
