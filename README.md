@@ -24,17 +24,34 @@ dotnet run
 
 ## 🧪 Executando os testes
 
-Entre na pasta dos testes ```cd src/triytter.Test```
+Entre na pasta dos testes ```cd src/triytter.Test``` e rode o comando:
 
 ```
 dotnet test
 ```
 
-Testes de cobertura:
-
+### Testes de cobertura:<br>
+Na pasta dos testes ```cd src/triytter.Test``` rode o comando:
 ```
-
+dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings 
 ```
+Para ver os resultados da cobertura no formato HTML,instale o reportgenerator-globaltool com o seguinte comando:
+```
+dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.8.6
+```
+E rode o seguinte comando na pasta criada pelo Code Coverage para armazenar os resultados:
+```
+reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coveragereport" -reporttypes:Html
+```
+Então visualize os resultados do arquivo ```index.html``` no navegador
+
+## :dart: Cobertura dos testes
+O testes deste projeto contemplaram uma cobertura de 98.3% da linhas.<br>
+As linhas não cobertas tratam de linhas de configurações.
+
+![Captura de tela de 2023-06-04 11-40-23](https://github.com/Ondion/Tryitter/assets/65035109/1ad6d5fd-a1d3-4c2d-99ce-b434b17c98f4)
+
+
 ## :hammer: Deploy
 >O deploy da aplicação foi executado utilizando o Microsoft Azure <br>
 >Os links do deploy são:<br>
