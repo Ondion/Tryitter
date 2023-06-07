@@ -1,20 +1,12 @@
 import './App.css';
-import Login from './Login';
+import Page from './Page';
 import { useState, useEffect } from 'react';
 
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  // useEffect(() => {
-  
-
-  //   if (email !== '' && password !== '') {
-  //     login();
-  //   }
-  // }, [email, password]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -38,7 +30,7 @@ function App() {
         });
 
         if (response) {
-          const data = await response;
+          const data = await response.json();
           console.log('OK:', data);
         } else {
           console.error('Falha:', response.status);
@@ -48,7 +40,7 @@ function App() {
       }
     };
 
-    login();
+    await login();
   }
 
 
@@ -56,7 +48,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         {isAuthenticated ?
-          <div>oi</div>
+          <Page />
           :
           <>
             <form>
