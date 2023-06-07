@@ -26,13 +26,13 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/tryitter
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: Tryitter
+          path: ${{env.DOTNET_ROOT}}/tryitter
 
   deploy:
     runs-on: windows-latest
@@ -45,7 +45,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: .net-app
+          name: Tryitter
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'Tryitter'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_62A4AA2BAA5D40C4BF71D199C4B13732 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8051C37D3CDE45A9B9134BF92E4A7681 }}
           package: .
